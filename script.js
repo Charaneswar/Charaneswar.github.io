@@ -1,30 +1,25 @@
-let slideIndex = 0;
+// Set up the scene
+const scene = new THREE.Scene();
+const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+const renderer = new THREE.WebGLRenderer();
+renderer.setSize(window.innerWidth, window.innerHeight);
+document.body.appendChild(renderer.domElement);
 
-function showSlides() {
-    let slides = document.getElementsByClassName("mySlides");
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    slideIndex++;
-    if (slideIndex > slides.length) {
-        slideIndex = 1;
-    }
-    slides[slideIndex - 1].style.display = "block";
-    setTimeout(showSlides, 3000); // Change slide every 3 seconds
+// Create a cartoon character (for example, a simple cube)
+const geometry = new THREE.BoxGeometry();
+const material = new THREE.MeshBasicMaterial({ color: 0xff00ff });
+const cube = new THREE.Mesh(geometry, material);
+scene.add(cube);
+
+// Set up GSAP animation
+gsap.to(cube.rotation, { duration: 2, x: Math.PI * 2, repeat: -1 });
+
+// Set up the camera position
+camera.position.z = 5;
+
+// Main animation loop
+function animate() {
+    requestAnimationFrame(animate);
+    renderer.render(scene, camera);
 }
-
-function plusSlides(n) {
-    slideIndex += n;
-    let slides = document.getElementsByClassName("mySlides");
-    if (slideIndex > slides.length) {
-        slideIndex = 1;
-    } else if (slideIndex < 1) {
-        slideIndex = slides.length;
-    }
-    for (let i = 0; i < slides.length; i++) {
-        slides[i].style.display = "none";
-    }
-    slides[slideIndex - 1].style.display = "block";
-}
-
-showSlides();
+animate();
